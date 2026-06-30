@@ -9,8 +9,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () {
+      var KEY = 'printit_manual_auth';
+      var TOKEN = 'f0c5411791e70d4c779d5bb15387371109c851eb5dbe85eaafaec755a5b2b0b8';
+      var TTL = 86400000;
+      try {
+        var raw = sessionStorage.getItem(KEY);
+        if (raw) {
+          var d = JSON.parse(raw);
+          if (d.v === TOKEN && Date.now() - d.t < TTL) {
+            document.documentElement.classList.add('auth-ready');
+            return;
+          }
+        }
+      } catch (e) {}
+      document.documentElement.classList.add('auth-locked');
+    })();
+  </script>
 </head>
 <body>
+  <div class="auth-gate" id="auth-gate" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="auth-gate__panel">
+      <img src="assets/logos/PNG/Iconotipo/PRINT%20IT%20iconopng-07.png" alt="" width="40" height="30" class="auth-gate__icon">
+      <p class="auth-gate__label">Print It BCN</p>
+      <h1 class="auth-gate__title" id="auth-title">Manual de marca</h1>
+      <p class="auth-gate__lead">Acceso restringido. Introduce la contraseña para consultar y descargar recursos.</p>
+      <form class="auth-gate__form" id="auth-form">
+        <label class="auth-gate__field">
+          <span>Contraseña</span>
+          <input type="password" id="auth-password" name="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit" class="btn btn--auth">Acceder</button>
+        <p class="auth-gate__error" id="auth-error" hidden></p>
+      </form>
+      <p class="auth-gate__hint">¿No tienes acceso? <a href="mailto:info@printitbcn.com">info@printitbcn.com</a></p>
+    </div>
+  </div>
+
   <div class="nav-glass-backdrop" aria-hidden="true"></div>
   <div class="layout-main">
     <header class="site-header" id="top">
@@ -1073,6 +1109,7 @@
         </div>
         <footer class="site-footer">
           <p>Print It BCN — Real Digital Productions · 2K26</p>
+          <button type="button" class="auth-logout" id="auth-logout">Cerrar sesión</button>
         </footer>
       </section>
     </main>
@@ -1094,6 +1131,7 @@
     }
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
